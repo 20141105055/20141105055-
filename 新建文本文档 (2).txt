@@ -1,0 +1,174 @@
+课 程 设 计 报 告
+
+课程设计名称：移动应用开发 
+
+课程设计题目：swift环境下计算器应用程序 
+
+ 
+院（系）：计算机与信息工程学院
+专    业：软件工程
+班    级：2014软件工程
+学    号：20141105055
+姓    名： 卢佳明
+Github网址： https://github.com/20141105055/
+
+指导教师：朝力萌 
+完成日期：2016.7.13
+目    录
+
+第1章  概要设计
+
+1.1题目的内容与要求
+内容：
+制作一个用swift语言编写的计算器应用程序，计算器应用程序可以实现基本的计算内容，通过点击对话框内的控件，实现各种数学计算，例如，加减乘除，AC，delet键，还有平方键，和各个数字键的绑定。
+要求：
+在制作计算器时，要求具有从1到9的数字按钮，小数点“.”和加减乘除，开方，CE，C和退格键delet等清除键等功能键，计算后显示在示例编辑框内的数值应不能在小数点后有多的“0”。
+
+1.2总体结构	
+第一部分；计算器的制作
+1.2.1数字键按钮的制作
+
+   在视图界面插入控件，绑定text输入框，在输入框内实现数据的输入，再添加各个数字键1～9，然后在ViewController类文件中处理函数，进行对函数代码进行编辑。从1到9的数字键编辑的方法诸如此类方法。特别强调，在对于“.”键的功能实现上代码相对其他数字键有一点区别，为了防止在输入框text中的“.”连续输入，在首部定义了一个布尔量pointval，ture和false，当pointval为false值时在输入框中可以添加一个“.”,当pointval为真时(ture)在输入中不能实现继续加入“.”，所以在其他数字键的定义时将pointval值赋为false，避免了“.”的连续输入。
+
+1.2.2功能键的制作
+  基本按键的制作方法如上，不再加以陈述，在func calculator(sender: AnyObject)功能键函数中需定义一个类似于标记不同功能键的判断值flag，这里的flag是一个全局变量，用这个判断值来对于编辑框内的数值进行具体的计算。其中，在定义各个功能键时加入了条件判断语句flag值的判断，防止当编辑框中为空时进行运算时发生错误。在对于delet键功能的实现上用removeAtIndex(_:)进而在索引位置删除字符，每点击一下就从右向左删除一个字节，即退格键的实现。根据数学的计算法则，被除数不能为0，因而在被除数中加入if的判断语句，用来判断被除数是否为0。
+1.2.3计算结果的显示
+在功能键和数字键的制作完成后，通过点击按钮将值输入到示例编辑框中在通过数据类型的转化，赋值到中间变量temp中，就可以对写入的数值进行预想的计算，在数值计算的实现时，定义一个calculator(sender: AnyObject)函数，通过在先前制作功能键时定义的全局变量flag对不同功能键的计算功能进行计算,并将结果重新赋值到到编辑框中。
+
+第2章  详细设计
+
+2.1主模块
+1.2.1数字键按钮的制作
+
+  @IBAction func one(sender: AnyObject) {
+        x.text=x.text!+"1"
+    }
+   
+    @IBAction func two(sender: AnyObject) {
+        x.text=x.text!+"2"
+    }
+（从1到9的制作方法一样，上面只列举数字键0和1的实现代码）
+@IBAction func point(sender: AnyObject) {
+        if(pointval == false){
+            x.text=x.text!+"."
+            pointval = true
+        }
+        else{
+            x.text=x.text!+""
+        }       
+    }
+
+“.”点数字键的实现与其他数字键的实现有所区别，因为在计算器中“.”不能实现连续输入。在此特别列出。
+var pointval:Bool=false（布尔常量的定义）
+1.2.2功能键的制作
+@IBAction func add(sender: AnyObject) {
+        if flag==0{
+            temp=(Double)(x.text!)!
+            x.text=""
+            pointval = false
+        }
+        flag=1
+    }
+    
+    @IBAction func sub(sender: AnyObject) {
+        if flag==0{
+            temp=(Double)(x.text!)!
+            x.text=""
+            pointval = false
+        }
+        flag=2
+
+    }
+1.2.3计算结果的显示 
+加减乘除功能键的实现：
+@IBAction func add(sender: AnyObject) {
+        if flag==0{
+            temp=(Double)(x.text!)!
+            x.text=""
+            pointval = false
+        }
+        flag=1
+    }
+    
+    @IBAction func sub(sender: AnyObject) {
+        if flag==0{
+            temp=(Double)(x.text!)!
+            x.text=""
+            pointval = false
+        }
+        flag=2
+
+    }
+2.2.3计算结果的显示
+等号的计算的函数：（用switch语句来实现多条件的分支语句）
+@IBAction func calculator(sender: AnyObject) {
+        switch flag {
+        case 1:
+            temp=temp+(Double)(x.text!)!
+            x.text="\(temp)"
+        case 2:
+            temp=temp-(Double)(x.text!)!
+            x.text="\(temp)"
+        case 3:
+            temp=temp*(Double)(x.text!)!
+            x.text="\(temp)"
+        case 4:
+            if(Double)(x.text!)==0
+            {
+                x.text="error"
+            }
+            else{
+                temp=temp/(Double)(x.text!)!
+                x.text="\(temp)"
+            }
+            
+        default:
+            break
+        }
+        flag=0
+    }
+
+第3章  调试分析
+
+3.1.1数字键制作的实现
+在定义了示例编辑框之后，在右侧的控件中找到text输入框，将输入到示例编辑框的值给，然后将x.text再更新到编辑框中，其中在“.”的数字键的实现时使用了 point（）函数，即“.”在text的编辑框中的个数只能为一，用一个if语句来判断实现，具体值用pointval布尔值的真假来判断。
+3.1.2功能键制作的实现
+在功能键的制作中，用if语句做了判断，即为了防止当输入框中的值为空时出现问题。在对于delet键功能的实现上用removeAtIndex(_:)进而在索引位置删除字符，每点击一下就从右向左删除一个字节，即退格键的实现。根据数学的计算法则，被除数不能为0，因而在被除数中加入if的判断语句，用来判断被除数是否为0。
+3.1.3计算结果的显示
+   这一节是计算器的核心片段，因为它可以实现计算结果的输出，在用判断值flag来判断进行不同的计算方式，即加或减或乘或除等其他方式，用if语句来控制，在if语句中先将编辑框中的值更新到变量temp中，然后进行逻辑计算，另外，特别注意的是，在text输入框中值的数据类型的相互转化。在等于的计算中使用了switch条件语句
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+第4章  使用说明与执行结果 
+
+运行操作及结果:
+二．课程设计小结
+  在实验中发现——分析——总结的问题有：
+
+
+参考文献：
+[1] 严蔚敏,吴伟民.数据结构（C语言版）.北京：清华大学出版社，2007
+[2]  
+[3] 
